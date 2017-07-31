@@ -1,0 +1,72 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Get the IP address of the server
+    command: "echo {{ ansible_ens33.ipv4.address }}"
+    register: server_ip
+  - replace:
+      #Making changes in the CollectD config file
+      destfile: /etc/collectd/collectd.conf
+      #Enabling user input plugins 
+      regexp: '#LoadPlugin {{ plugins }}'
+      replace: 'LoadPlugin {{ plugins }}'
+      backup: yes
+  - replace:
+      name: Enabling Plugins for configurations
+      destfile: /etc/collectd/collectd.conf
+      regexp: '#<Plugin'
+      replace: '<Plugin'
+      backup: yes
+  - replace:
+      name: Enabling Plugins for configurations - 2
+      destfile: /etc/collectd/collectd.conf
+      regexp: '#</Plugin>'
+      replace: '</Plugin>'
+      backup: yes
+ 
+- hosts: '{{ group }}'
+  become: true
+  become_user: root
+  tasks:
+  - name: install collectD
+    apt: name=collectd update_cache=yes state=latest	#update_cache ==> update machine before installing
+  - name: install collectD utilities 
+    apt: name=collectd-utils update_cache=yes state=latest	
+  - replace:
+      #name: Making changes in the CollectD config file
+      destfile: /etc/collectd/collectd.conf
+      #name: Enabling user input plugins 
+      regexp: '#LoadPlugin {{ plugins }}'
+      replace: 'LoadPlugin {{ plugins }}'
+      backup: yes
+  - replace:    
+      name: Enabling Plugins for configurations
+      destfile: /etc/collectd/collectd.conf
+      regexp: '#<Plugin'
+      replace: '<Plugin'
+      backup: yes 
+  - replace:
+      name: Enabling Plugins for configurations - 2
+      destfile: /etc/collectd/collectd.conf    
+      regexp: '#</Plugin>'
+      replace: '</Plugin>'
+      backup: yes
+  - replace: 
+      name: Connecting the clients to the server using network plugins
+      destfile: /etc/collectd/collectd.conf
+      regexp: "^(#       Server.*)$"
+      replace: '       Server "{{hostvars.localhost.server_ip.stdout}}" "25826"'   
+      backup: yes
+  - replace:
+      name: Connecting the clients to the server using network plugins #after first time, when it is uncommented
+      destfile: /etc/collectd/collectd.conf
+      regexp: "^(       Server.*)$"
+      replace: '       Server "{{hostvars.localhost.server_ip.stdout}}" "25826"'
+      backup: no
+  - name: Restarting collectd for the changes to take effect  
+    service:
+      name: collectd
+      enabled: yes 
+      state: restarted
+...
+

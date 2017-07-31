@@ -1,0 +1,17 @@
+---
+- hosts: '{{ group }}'
+  become: true
+  become_user: root
+  tasks:
+  - replace:
+      destfile: /etc/collectd/collectd.conf
+      #Enabling user input plugins 
+      regexp: '#LoadPlugin {{ plugins }}'
+      replace: 'LoadPlugin {{ plugins }}'
+      backup: no
+  - name: Restarting collectd for the changes to take effect
+    service:
+      name: collectd
+      enabled: yes
+      state: restarted
+...
