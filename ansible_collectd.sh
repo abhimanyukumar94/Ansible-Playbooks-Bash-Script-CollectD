@@ -35,9 +35,13 @@ echo Configuring server to store data received from clients...
 sudo sed -i '/LoadPlugin rrdtool/s/^# *//' /etc/collectd/collectd.conf
 sudo sed -i '/LoadPlugin csv/s/^# *//' /etc/collectd/collectd.conf 
 
-#Using Ansible, configuring all the clients
+#Using Ansible, configuring all the clients for establishing connection with the server
 echo Configuring all clients to send data to the server...
 ansible-playbook --ask-su-pass -s --extra-vars "plugins=network group=$group" main.yml
+
+#Configuring CSV and RRD plugins on clients, so that they can send their data to the server
+ansible-playbook --ask-su-pass -s --extra-vars "plugins=csv group=$group" plugin.yml
+ansible-playbook --ask-su-pass -s --extra-vars "plugins=rrdtool group=$group" plugin.yml
 
 #Asking User to enable more plugins
 echo Do you want to enable more plugins? y/n
