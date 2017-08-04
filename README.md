@@ -11,7 +11,7 @@ This repository consist of the following:
 # Getting Started
 
 1. Clone the repository
-2. Give special permission to ansible____collectd.sh script by executing the command: <code>$ chmod +x ansible_collectd.sh</code>
+2. Give special permission to ansible_collectd.sh script by executing the command: <code>$ chmod +x ansible_collectd.sh</code>
 3. Execute the script: <code>$ ./ansible_collectd.sh</code>
 
 __Note:__ The user should execute the script on the machine which will run in Server mode of CollectD
