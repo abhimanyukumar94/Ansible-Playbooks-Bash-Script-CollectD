@@ -3,7 +3,7 @@ Automated configuration of CollectD on Server and Client nodes using Bash script
 
 # About
 This repository consist of the following:
-1. __CollectD_Document:__ This is an introductory document where the read will learn about CollectD and it's plugins. It will also help in configuring CollectD server-client model.
+1. __CollectD_Document:__ This is an introductory document where the read will learn about CollectD and it's plugins. It will also help in configuring CollectD's server-client model.
 2. __ansible_collectD:__ This is bash script which needs to be run for automation
 3. __main.yml:__ Ansible Playbook for configuring CollectD server and client
 4. __plugin.yml:__ Ansible Playbook for configuring Plugins at the clients.
