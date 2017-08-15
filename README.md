@@ -1,4 +1,4 @@
-# Ansible-Playbooks-Bash-Script-CollectD
+# Automating CollectD Configuration
 Automated configuration of CollectD on Server and Client nodes using Bash script and Ansible Playbooks
 
 # About
